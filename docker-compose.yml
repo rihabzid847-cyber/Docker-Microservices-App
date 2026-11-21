@@ -1,0 +1,35 @@
+
+services:
+
+  redis:
+    image: redis:7
+    container_name: app-redis
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: app-backend
+    ports:
+      - "3000:3000"
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: app-frontend
+    ports:
+     - "8082:80"
+    depends_on:
+      - backend
+
+volumes:
+  redis_data:
