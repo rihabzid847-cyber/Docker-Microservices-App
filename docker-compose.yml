@@ -1,6 +1,5 @@
 
 services:
-
   redis:
     image: redis:7
     container_name: app-redis
@@ -14,6 +13,7 @@ services:
 
   backend:
     build: ./backend
+    image: docker-microservices-app-backend:latest
     container_name: app-backend
     ports:
       - "3000:3000"
@@ -25,9 +25,10 @@ services:
 
   frontend:
     build: ./frontend
+    image: docker-microservices-app-frontend:latest
     container_name: app-frontend
     ports:
-     - "8082:80"
+      - "8082:80"
     depends_on:
       - backend
 
